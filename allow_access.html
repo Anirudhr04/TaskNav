@@ -109,12 +109,19 @@
     </div>
 
     <script>
+        document.getElementById('allow').addEventListener('click', function() {
+            // You can add a function here to handle what happens when 'Allow' is clicked on the second page
+            window.location.href = "task.html";
+        });
+        document.getElementById('onlyWhileUsing').addEventListener('click', function() {
+            // You can add a function here to handle what happens when 'Allow' is clicked on the second page
+            window.location.href = "task.html";
+        });
         document.getElementById('deny').addEventListener('click', function() {
             // Hide the first page and show the second page
             document.getElementById('page1').classList.remove('active');
             document.getElementById('page2').classList.add('active');
         });
-
         document.getElementById('allowAccess').addEventListener('click', function() {
             // You can add a function here to handle what happens when 'Allow' is clicked on the second page
             alert('Location access allowed!');
