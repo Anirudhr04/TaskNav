@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Locator</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Store Locator</h1>
+    <input type="text" id="product-input" placeholder="Enter product name" />
+    <button id="search-button">Search</button>
+    <div id="map"></div>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([51.505, -0.09], 13); // Default view set to London
+
+        // Load OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Function to add a marker for the stores
+        function addStoreMarker(lat, lng, name, address) {
+            L.marker([lat, lng]).addTo(map)
+                .bindPopup(`<b>${name}</b><br>${address}`)
+                .openPopup();
+        }
+
+        // Function to fetch stores based on user input
+        function fetchStores() {
+            const product = document.getElementById('product-input').value; // Get product from input field
+            const lat = map.getCenter().lat; // Get current map center latitude
+            const lng = map.getCenter().lng; // Get current map center longitude
+
+            fetch('/get-store', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ product, lat, lng }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Clear previous markers
+                map.eachLayer((layer) => {
+                    if (layer instanceof L.Marker) {
+                        map.removeLayer(layer);
+                    }
+                });
+
+                if (data.stores) {
+                    data.stores.forEach(store => {
+                        addStoreMarker(store.latitude, store.longitude, store.name, store.address);
+                    });
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error('Error fetching store data:', error));
+        }
+
+        // Add event listener to search button
+        document.getElementById('search-button').addEventListener('click', fetchStores);
+    </script>
+</body>
+</html>
