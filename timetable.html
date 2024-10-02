@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Timetable</title>
+    <link rel="stylesheet" href="timetable.css">
+</head>
+<body>
+    <div class="dropdown">
+        <button id="selected-day" class="dropbtn">Monday</button>
+        <div class="dropdown-content">
+            <a href="#" data-day="Monday">Monday</a>
+            <a href="#" data-day="Tuesday">Tuesday</a>
+            <a href="#" data-day="Wednesday">Wednesday</a>
+            <a href="#" data-day="Thursday">Thursday</a>
+            <a href="#" data-day="Friday">Friday</a>
+            <a href="#" data-day="Saturday">Saturday</a>
+            <a href="#" data-day="Sunday">Sunday</a>
+        </div>
+    </div>
+
+    <div id="time-slots-container"></div>
+
+    <button id="save-timetable">Save Timetable</button>
+
+    <!-- Firebase JS SDK -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+
+    <!-- Custom JS -->
+    <script src="timetable.js" type="module"></script>
+</body>
+</html>

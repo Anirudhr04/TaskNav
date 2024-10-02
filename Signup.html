@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In with OTP</title>
+  <link rel="stylesheet" href="./signup.css">
+</head>
+<body>
+
+  <div class="signin-container">
+    <h2>Sign Up</h2>
+    <form id="signin-form">
+      <input type="email" class="input-box" id="emailid" placeholder="Email ID" required><br>
+      <input type="password" class="input-box" id="password" placeholder="Password" required><br>
+      <input type="tel" class="input-box" id="phonenumber" placeholder="Phone No." required><br>
+      <button type="button" class="submit-btn" id="submit">Submit</button>
+    </form>
+    
+    <div class="otp-section" id="otp-section">
+      <h3>Enter OTP</h3>
+      <input type="text" class="otp-box" placeholder="Enter OTP" required><br>
+      <button type="submit" class="otp-btn">Submit OTP</button>
+    </div>
+  </div>
+
+  <script type="module" src="./signup.js" defer></script>
+</body>
+</html>

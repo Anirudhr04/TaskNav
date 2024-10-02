@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(360deg, #209cdb, #151013);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    /* Main container */
+    .container {
+      background-color: #000000;
+      border-radius: 25px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #f1f1f1;
+    }
+
+    /* Task input container */
+    .task-input-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .task-input {
+      width: 300px;
+      padding: 15px;
+      border-radius: 30px;
+      border: none;
+      background-color: #2b2b2b;
+      color: white;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    .add-btn {
+      height: 50px;
+      background-color: #28a745;
+      border: none;
+      border-radius: 30px;
+      color: white;
+      padding: 5px 50px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .add-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Stacked tasks container */
+    .tasks-stack {
+      display: flex;
+      flex-direction: column-reverse; /* Stack from bottom to top */
+      position: relative;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .task-box {
+      background: linear-gradient(45deg, #373549, #7895b1);
+      padding: 20px;
+      margin: 10px 0;
+      border-radius: 15px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.4);
+      color: white;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .task-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Delete button */
+    .delete-btn {
+      background-color: rgb(254, 252, 252);
+      border: none;
+      color: rgb(116, 64, 175);
+      border-radius: 50%;
+      padding: 5px 10px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    /* See location button */
+    .location-btn {
+      background-color: rgb(52, 152, 219);
+      border: none;
+      color: white;
+      border-radius: 20px;
+      padding: 5px 10px;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .location-btn:hover {
+      background-color: rgb(41, 128, 185);
+    }
+
+    /* Sliding in effect for tasks */
+    .task-box {
+      animation: slideInUp 0.5s ease forwards;
+    }
+
+    @keyframes slideInUp {
+      0% {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Drag and Drop style */
+    .dragging {
+      opacity: 0.5;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Task Manager</h1>
+    <div class="task-input-container">
+      <input type="text" class="task-input" id="task-input" placeholder="Add a new task...">
+      <button class="add-btn" onclick="addTask()">Add</button>
+    </div>
+
+    <div class="tasks-stack" id="tasks-stack">
+      <!-- Task boxes will be added here dynamically -->
+    </div>
+  </div>
+
+  <script>
+    function addTask() {
+      const taskInput = document.getElementById('task-input');
+      const taskText = taskInput.value.trim();
+
+      if (taskText === '') {
+        alert('Please enter a task!');
+        return;
+      }
+
+      // Create task box element
+      const taskBox = document.createElement('div');
+      taskBox.className = 'task-box';
+      taskBox.draggable = true;
+      taskBox.innerHTML = `<span>${taskText}</span>`;
+
+      // Create a container for the buttons
+      const buttonContainer = document.createElement('div');
+      buttonContainer.style.display = 'flex';
+      buttonContainer.style.alignItems = 'center';
+
+      // Add delete button to the button container
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.innerHTML = 'X';
+      deleteBtn.onclick = function() {
+        taskBox.remove(); // Remove task when clicking on delete button
+      };
+
+      // Add see location button to the button container
+      const locationBtn = document.createElement('button');
+      locationBtn.className = 'location-btn';
+      locationBtn.innerHTML = 'See Location';
+      locationBtn.onclick = function() {
+        // Open map view based on the task keyword
+        const query = encodeURIComponent(taskText);
+        const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
+        window.open(url, '_blank'); // Open in a new tab
+      };
+
+      // Append buttons to the button container
+      buttonContainer.appendChild(locationBtn);
+      buttonContainer.appendChild(deleteBtn);
+
+      // Append the button container to the task box
+      taskBox.appendChild(buttonContainer);
+      document.getElementById('tasks-stack').appendChild(taskBox);
+
+      // Add drag event listeners for rearranging tasks
+      taskBox.addEventListener('dragstart', () => {
+        taskBox.classList.add('dragging');
+      });
+
+      taskBox.addEventListener('dragend', () => {
+        taskBox.classList.remove('dragging');
+      });
+
+      taskInput.value = ''; // Clear input field after adding task
+    }
+
+    // Handle drag and drop for rearranging tasks
+    const tasksStack = document.getElementById('tasks-stack');
+
+    tasksStack.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      const draggingTask = document.querySelector('.dragging');
+      const afterElement = getDragAfterElement(tasksStack, e.clientY);
+      if (afterElement == null) {
+        tasksStack.appendChild(draggingTask);
+      } else {
+        tasksStack.insertBefore(draggingTask, afterElement);
+      }
+    });
+
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('.task-box:not(.dragging)')];
+
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+  </script>
+</body>
+</html>

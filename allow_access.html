@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Access</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page {
+            display: none;
+            text-align: center;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .content {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Button Styling */
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #1E1E1E;
+            color: #fff;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #292929;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            background-color: #333;
+            transform: scale(0.98);
+        }
+
+        .deny {
+            background-color: #d32f2f;
+        }
+
+        .deny:hover {
+            background-color: #b71c1c;
+        }
+
+        /* Second page button style */
+        .allow-again {
+            background-color: #388e3c;
+        }
+
+        .allow-again:hover {
+            background-color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <!-- First Page -->
+    <div id="page1" class="page active">
+        <div class="content">
+            <h1>Allow access for location</h1>
+            <div class="buttons">
+                <button class="btn" id="allow">Allow access</button>
+                <button class="btn" id="onlyWhileUsing">Only while using this app</button>
+                <button class="btn deny" id="deny">Deny</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Page (Shown when 'Deny' is clicked) -->
+    <div id="page2" class="page">
+        <div class="content">
+            <h1>Access to location is compulsory</h1>
+            <button class="btn allow-again" id="allowAccess">Allow</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('deny').addEventListener('click', function() {
+            // Hide the first page and show the second page
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+        });
+
+        document.getElementById('allowAccess').addEventListener('click', function() {
+            // You can add a function here to handle what happens when 'Allow' is clicked on the second page
+            alert('Location access allowed!');
+            window.location.href = "task.html";
+        });
+    </script>
+</body>
+</html>
